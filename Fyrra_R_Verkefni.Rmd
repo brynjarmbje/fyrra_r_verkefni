@@ -1,0 +1,33 @@
+---
+title: "Verkefni 1"
+author: "Brynjar Mar (bmb23) og"
+date: "2024-01-31"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+
+```
+
+## Hluti 1
+
+*Við*  ætlum  að vinna **með...**
+
+## HTML skjalinu er skilað í lokin. Eftir að gera Knit.
+```{r}
+bmboom <- read_csv2("https://ahj.hi.is/kaupskra.csv", locale = locale(encoding = "ISO8859-1"))
+names(bmboom)
+```
+medaltal taknad med $\mu$
+
+## https://www.fasteignaskra.is/gogn/grunngogn-til-nidurhals/kaupskra-fasteigna/eigindalysing-kaupskrar
+
+
+$$
+latex her inni
+$$
