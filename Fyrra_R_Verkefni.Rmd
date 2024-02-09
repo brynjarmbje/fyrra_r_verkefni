@@ -1,6 +1,6 @@
 ---
 title: "Verkefni 1"
-author: "Brynjar Mar (bmb23) og"
+author: "Brynjar Mar (bmb23) og Kári Einarsson (kae44)"
 date: "2024-01-31"
 output: html_document
 ---
@@ -15,19 +15,41 @@ library(tidyverse)
 ```
 
 ## Hluti 1
-
-*Við*  ætlum  að vinna **með...**
-
-## HTML skjalinu er skilað í lokin. Eftir að gera Knit.
+##a)##
 ```{r}
-bmboom <- read_csv2("https://ahj.hi.is/kaupskra.csv", locale = locale(encoding = "ISO8859-1"))
-names(bmboom)
+bik <- read_csv2("https://ahj.hi.is/kaupskra.csv", locale = locale(encoding = "ISO8859-1"))
+names(bik)
 ```
 medaltal taknad med $\mu$
 
 ## https://www.fasteignaskra.is/gogn/grunngogn-til-nidurhals/kaupskra-fasteigna/eigindalysing-kaupskrar
 
+##b##
+```{r}
+tegund_inni <- c("Serbyli", "Fjolbyli")
+bik <- filter(bik, fullbuid==1, tegund%in%tegund_inni, onothaefur_samningur==0)
+```
 
-$$
-latex her inni
-$$
+
+
+##c##
+```{r}
+bik <- mutate(bik, fermetraverd=kaupverd/einflm)
+```
+
+##d##
+```{r}
+bik <- mutate(bik, ar=year(utgdag))
+```
+
+##e##
+```{r}
+pnr <- c(107, 105, 210)
+bik <- filter(bik, postnr%in%pnr)
+```
+
+##f##
+```{r}
+
+```
+
