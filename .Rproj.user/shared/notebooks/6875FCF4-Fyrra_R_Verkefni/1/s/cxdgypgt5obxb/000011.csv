@@ -1,0 +1,6 @@
+"0","bbrynjar <- filter(bmboom, fullbuid==1, tegund%in%c(""Serbyli"",""Fjolbyli""))
+"
+"2","Error: unexpected symbol in:
+""
+bbrynjar""
+"

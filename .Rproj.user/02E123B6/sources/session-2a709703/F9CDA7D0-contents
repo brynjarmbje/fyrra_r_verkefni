@@ -1,0 +1,19 @@
+# prufa dot kafli 6
+# Brynjar  Már Björnsson
+
+####
+
+library(tidyverse)
+
+sample(1:10, 5, replace = T)
+
+
+
+puls <- read_csv2("https://ahj.hi.is/kaupskra.csv", locale = locale(encoding = "ISO8859-1"))
+
+set.seed(0204)
+puls.urtak <- sample_n(puls, 10)
+
+urtok.haed <- replicate(1000, sample(puls$skjalanumer, 10))
+
+urtak.medaltal <- replicate(1000, mean(sample(puls$fastnum)))
