@@ -1,6 +1,6 @@
 ---
 title: "Verkefni 1"
-author: "Brynjar Mar (bmb23) og Kári Einarsson (kae44)"
+author: "Brynjar Mar (bmb23) og Kári Einarsson (kae44)" 
 date: "2024-01-31"
 output: html_document
 ---
@@ -50,6 +50,63 @@ bik <- filter(bik, postnr%in%pnr)
 
 ##f##
 ```{r}
+bik <- mutate(bik, emnr = factor(emnr))
+bik <- mutate(bik, postnr = factor(postnr))
+bik <- mutate
 
 ```
 
+##g##
+```{r}
+staerdeigna <- ggplot(bik, aes(x=einflm)) +
+  geom_histogram(binwidth = 10, fill="blue", color="black") + # Binwidth gæti þurft aðlögun
+  xlab('Stærð (fermetrar)') +
+  ylab('Eignir') +
+  ggtitle('Dreifing stærðar eigna') +
+  theme_minimal()
+
+staerdeigna
+```
+
+##h##
+```{r}
+postnrtegund <- ggplot(bik, aes(x=postnr, fill=tegund)) +
+  geom_bar(position='dodge') + # Nota sjálfgefið stat="count" til að telja tilvik
+  xlab('Póstnúmer') +
+  ylab('Fjöldi eigna') +
+  labs(fill='Tegund') + # Merkja fyllingarbreytuna sem tegund eignar
+  theme_minimal()
+
+postnrtegund
+```
+
+
+
+
+##i##
+```{r}
+postnrstaerd <- ggplot(bik,aes(x=postnr, y=einflm)) + geom_boxplot() + xlab('postnr') + ylab('stærð')
+postnrstaerd
+```
+
+
+Teiknið mynd sem sýnir samband stærðar og kaupverðs fyrir hvert póstnúmer fyrir sig (notið t.d. facet_grid til að skipta myndinni upp eftir póstnúmerum). Notið mismunadi liti til að sýna hvaða ár eignirnar voru keyptar. Eru einhverjir gagnapunktar sem koma í ljós sem mögulega þarf að skoða sérstaklega? Ef svo er skulið þið gera það. 
+##j##
+```{r}
+library(ggplot2)
+ggplot(bik, aes(x=einflm, y=kaupverd, color=ar)) +
+  geom_point() +  # Notar punkta til að sýna hvert gagnapar
+  facet_grid(~ postnr) +  # Skiptir myndinni upp eftir póstnúmerum
+  scale_color_gradient(low="blue", high="green") +  # Breytir litaskala fyrir kaupár
+  labs(x="Stærð (fermetrar)", y="Kaupverð", color="Kaupár") +
+  theme_minimal() +
+  ggtitle("Samband milli stærðar og kaupverðs eftir póstnúmerum")
+
+```
+
+
+##k##
+Búið til töflu sem sýnir fjölda eigna í póstnúmerunum þremur eftir gerð eigna (sérbýli eða fjölbýli).
+```{r}
+
+```
