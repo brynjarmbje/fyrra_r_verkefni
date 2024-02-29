@@ -12,6 +12,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 library(ggplot2)
+library(scales)
+library(knitr)
 ```
 
 ## Hluti 1 
@@ -138,16 +140,32 @@ ggplot(bik, aes(x=einflm, y=kaupverd, color=ar)) +
 Búið til töflu sem sýnir fjölda eigna í póstnúmerunum þremur eftir gerð eigna (sérbýli eða fjölbýli).
 ```{r}
 
+# Búum til töflu sem sýnir fjölda eigna í hverju póstnúmeri eftir gerð eigna
+taflak <- bik %>%
+  group_by(postnr, tegund) %>%  # Hópum gögnin eftir póstnúmeri og gerð eigna
+  summarise(fjoldi = n(), .groups = 'drop')  # Teljum fjölda eigna í hverjum hóp
+
+# Prentum út töfluna
+print(taflak)
 ```
-
-
-
-
 
 ##l##
 Búið til töflu sem sýnir hlutfall sérbýla og fjölbýla í póstnúmerunum þremur. Það á s.s. að vera hægt að lesa hvert hlutfall sérbýla og fjölbýla er í hverju póstnúmeri fyrir sig. 
 ```{r}
+tafla <- bik %>%
+  filter(postnr %in% c(105, 107, 210)) %>%  # Filter for the desired postal codes
+  group_by(postnr, tegund) %>%
+  summarise(fjoldi = n(), .groups = 'drop') %>%  # Count occurrences of each 'tegund' within 'postnr'
+  group_by(postnr) %>%
+  mutate(total = sum(fjoldi)) %>%  # Calculate total count per 'postnr'
+  mutate(hlutfall = round(fjoldi / total * 100, 1)) %>%  # Calculate the percentage and round to 1 decimal place
+  ungroup() %>%
+  mutate(hlutfall = paste0(hlutfall, "%")) %>%  # Append '%' sign
+  select(-fjoldi, -total) %>%
+  pivot_wider(names_from = tegund, values_from = hlutfall)  # Reshape the data
 
+# Print the corrected table
+print(tafla)
 ```
 
 
@@ -155,7 +173,18 @@ Búið til töflu sem sýnir hlutfall sérbýla og fjölbýla í póstnúmerunum
 ##m##
 Búið til töflu sem sýnir meðaltal, miðgildi og staðalfrávik fermetraverðs skipt upp eftir ári, póstnúmeri og tegund eigna (sérbýli eða fjölbýli). Sýnið einnig fjölda eigna sem lenda í hverjum flokki í töflunni. Það á t.d. að vera hægt að lesa hvert meðalfermetraverð eigna í sérbýli var árið 2021 í hverju póstnúmeri fyrir sig og hversu margir kaupsamingar eru að baki. 
 ```{r}
+tolfraedi_tabla <- bik %>%
+  group_by(ar, postnr, tegund) %>%
+  summarise(
+    Medaltal = mean(fermetraverd, na.rm = TRUE),
+    Midgildi = median(fermetraverd, na.rm = TRUE),
+    Stadalfravik = sd(fermetraverd, na.rm = TRUE),
+    Fjoldi = n(),
+    .groups = 'drop'  
+  )
 
+
+tolfraedi_tabla
 ```
 
 
@@ -165,29 +194,28 @@ Búið til töflu sem sýnir meðaltal, miðgildi og staðalfrávik fermetraver�
 ##n##
 Gerum nú ráð fyrir að við séum að vinna með hverfi á stórreykjavíkursvæðinu þar sem 20% eigna eru einbýlishús. Hugsum okkur nú að við veljum 3 eignir í hverfinu af handahófi.
 
-i) Hverjar eru líkurnar á að ein eignin sé einbýlishús? 
+ia) Hverjar eru líkurnar á að ein eignin sé einbýlishús?
+ef það má bara vera ein og ekki fleiri
 ```{r}
-
+dbinom(1,3,0.2)
 ```
-
+ib) Hverjar eru líkurnar á að ein eignin sé einbýlishús?
+ef það mega vera fleiri en ein
+```{r}
+1-pbinom(0,3,0.2)
+```
 ii) Hverjar eru líkurnar á að fleiri en ein eign séu einbýlishús?
 ```{r}
-
+1-pbinom(1,3,0.2)
 ```
-
-
-
 ##o##
 Gerum nú ráð fyrir að stærð einbýlishúsa í hverfinu fylgi normaldreifingu með meðaltal 170 fm og staðalfrávik 20 fm. 
 i) Sé eign úr hverfinu valin af handahófi, hverjar eru líkurnar á að hún sé stærri en 180 fm?
 ```{r}
-
+pnorm(180,170,20)
 ```
 
 ii) Jonni ætlar að byggja einbýlishús í hverfinu og vill endilega að það verði í hópi 5% stærstu einbýlishúsanna í hverfinu. Hvað þarf húsið að verða stórt?
 ```{r}
-
+qnorm(0.95,170,20)
 ```
-
-
-
