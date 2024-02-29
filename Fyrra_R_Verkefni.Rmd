@@ -1,12 +1,21 @@
 ---
 title: "Verkefni 1"
-author: "Brynjar Mar (bmb23) og Kári Einarsson (kae44)" 
-date: "2024-01-31"
-output: html_document
+author: 
+  - name: "Brynjar Mar (bmb23), Kári Einarsson (kae44) og Indriði Már Indriðason (imi2)" 
+    title: Developers
+date: "`r Sys.Date()`"
+output:
+  rmdformats::downcute:
+    code_folding: show
+    self_contained: true
+    thumbnails: false
+    lightbox: true
+pkgdown:
+  as_is: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, cache = FALSE, warning = F, message = F)
 ```
 
 ```{r}
@@ -15,12 +24,9 @@ library(ggplot2)
 library(scales)
 library(knitr)
 ```
+# Hluti 1 - Gagnamöndl (30 %)
 
-## Hluti 1 
-## Gagnamöndl (30 %)
-
-
-##a##
+## a
 Lesið gagnasafnið inn í R/RStudio með skipuninni hér að neðan og geymið í hlut sem ber upphafsstafi þeirra sem verkefnið vinna (ef Gréta Halldórsdóttir og Sigurður Karl Jónsson eru að vinna saman skulu þau nefna hlutinn gs).
 
 nafn_a_hlut <- read_csv2("https://ahj.hi.is/kaupskra.csv", locale = locale(encoding = "ISO8859-1"))
@@ -28,59 +34,49 @@ nafn_a_hlut <- read_csv2("https://ahj.hi.is/kaupskra.csv", locale = locale(encod
 þar sem þið skiptið nafn_a_hlut út fyrir upphafsstafina (þó skal ekki nota íslenska stafi).
 ```{r}
 bik <- read_csv2("https://ahj.hi.is/kaupskra.csv", locale = locale(encoding = "ISO8859-1"))
-names(bik)
-bik
 ```
 medaltal taknad med $\mu$
 
-## https://www.fasteignaskra.is/gogn/grunngogn-til-nidurhals/kaupskra-fasteigna/eigindalysing-kaupskrar
-
-##b##
+## b
 Notið filter() skipunina til að velja fullbúnar eignir (sjá fullbuid breytuna) sem eru "Fjolbyli" og "Serbyli" og byggja á  samningum sem eru er nothæfir. Yfirskrifið stóra gagnaramman í a) lið með þessum eignum.
 ```{r}
 tegund_inni <- c("Serbyli", "Fjolbyli")
 bik <- filter(bik, fullbuid==1, tegund%in%tegund_inni, onothaefur_samningur==0)
-bik
 ```
 
 
 
-##c##
+## c
 Búið til nýja breytu í gagnarammanum ykkar sem inniheldur fermetraverð eignanna, nefnið breytuna fermetraverd.
 ```{r}
 bik <- mutate(bik, fermetraverd=kaupverd/einflm)
-bik
 ```
 
-##d##
+## d
 Búið til nýja breytu í gagnarammanum ykkar sem inniheldur árið sem eignin var seld, nefnið breytuna ar (t.d. með að nota year() fallið í lubridate pakkanum).
 ```{r}
 bik <- mutate(bik, ar=year(utgdag))
-bik
 ```
 
-##e##
+## e
 Veljið ykkur þrjú póstnúmer til að vinna með. Það þurfa að vera a.m.k. 200 sérbýli í hverju póstúmeri fyrir sig. Yfirskrifið gagnaramman í b) lið með eignum úr þessum þremur póstnúmerum. Þið skulið nota þennan gagnaramma í verkefninu.
 ```{r}
 pnr <- c(107, 105, 210)
 bik <- filter(bik, postnr%in%pnr)
-bik
 ```
 
-##f##
+## f
 Kannið gerð breytanna í gagnarammanum ykkar og breytið ef þarf.  
 ```{r}
 bik <- mutate(bik, emnr = factor(emnr))
 bik <- mutate(bik, postnr = factor(postnr))
-bik
 ```
 
 
 
-## Hluti 2 
-## Myndræn Framsetning (30%)
+# Hluti 2 - Myndræn Framsetning (30%)
 
-##g##
+## g
 Teiknið mynd sem sýnir stærð eignanna í rammanum ykkar (það eiga ekki að vera aðrar breytur á myndinni). Eru einhverjir gagnapunktar sem koma í ljós sem mögulega þarf að skoða sérstaklega? Ef svo er skulið þið gera það.
 ```{r}
 staerdeigna <- ggplot(bik, aes(x=einflm)) +
@@ -93,7 +89,7 @@ staerdeigna <- ggplot(bik, aes(x=einflm)) +
 staerdeigna
 ```
 
-##h##
+## h
 Teiknið mynd sem sýnir fjölda eigna eftir póstnúmerum og tegundum eigna á sömu mynd (sérbýli eða fjölbýli).
 ```{r}
 postnrtegund <- ggplot(bik, aes(x=postnr, fill=tegund)) +
@@ -109,7 +105,7 @@ postnrtegund
 
 
 
-##i##
+## i
 Teiknið mynd sem sýnir stærð eignanna eftir póstnúmeri. 
 ```{r}
 postnrstaerd <- ggplot(bik,aes(x=postnr, y=einflm)) + geom_boxplot() + xlab('postnr') + ylab('stærð')
@@ -118,7 +114,7 @@ postnrstaerd
 
 
 
-##j##
+## j
 Teiknið mynd sem sýnir samband stærðar og kaupverðs fyrir hvert póstnúmer fyrir sig (notið t.d. facet_grid til að skipta myndinni upp eftir póstnúmerum). Notið mismunadi liti til að sýna hvaða ár eignirnar voru keyptar. Eru einhverjir gagnapunktar sem koma í ljós sem mögulega þarf að skoða sérstaklega? Ef svo er skulið þið gera það. 
 ```{r}
 
@@ -129,14 +125,12 @@ ggplot(bik, aes(x=einflm, y=kaupverd, color=ar)) +
   labs(x="Stærð (fermetrar)", y="Kaupverð", color="Kaupár") +
   theme_minimal() +
   ggtitle("Samband milli stærðar og kaupverðs eftir póstnúmerum")
-
 ```
 
 
-## Hluti 3
-## Töflur (20%)
+# Hluti 3- Töflur (20%)
 
-##k##
+## k
 Búið til töflu sem sýnir fjölda eigna í póstnúmerunum þremur eftir gerð eigna (sérbýli eða fjölbýli).
 ```{r}
 
@@ -149,7 +143,7 @@ taflak <- bik %>%
 print(taflak)
 ```
 
-##l##
+## l
 Búið til töflu sem sýnir hlutfall sérbýla og fjölbýla í póstnúmerunum þremur. Það á s.s. að vera hægt að lesa hvert hlutfall sérbýla og fjölbýla er í hverju póstnúmeri fyrir sig. 
 ```{r}
 tafla <- bik %>%
@@ -170,7 +164,7 @@ print(tafla)
 
 
 
-##m##
+## m
 Búið til töflu sem sýnir meðaltal, miðgildi og staðalfrávik fermetraverðs skipt upp eftir ári, póstnúmeri og tegund eigna (sérbýli eða fjölbýli). Sýnið einnig fjölda eigna sem lenda í hverjum flokki í töflunni. Það á t.d. að vera hægt að lesa hvert meðalfermetraverð eigna í sérbýli var árið 2021 í hverju póstnúmeri fyrir sig og hversu margir kaupsamingar eru að baki. 
 ```{r}
 tolfraedi_tabla <- bik %>%
@@ -182,40 +176,40 @@ tolfraedi_tabla <- bik %>%
     Fjoldi = n(),
     .groups = 'drop'  
   )
-
-
 tolfraedi_tabla
 ```
 
 
-## Hluti 4
-## Líkindafræði (10%)
+# Hluti 4 - Líkindafræði (10%)
 
-##n##
+## n
 Gerum nú ráð fyrir að við séum að vinna með hverfi á stórreykjavíkursvæðinu þar sem 20% eigna eru einbýlishús. Hugsum okkur nú að við veljum 3 eignir í hverfinu af handahófi.
 
-ia) Hverjar eru líkurnar á að ein eignin sé einbýlishús?
-ef það má bara vera ein og ekki fleiri
+### i
+Hverjar eru líkurnar á að ein eignin sé einbýlishús?
+a) ef það má bara vera ein og ekki fleiri
 ```{r}
 dbinom(1,3,0.2)
 ```
-ib) Hverjar eru líkurnar á að ein eignin sé einbýlishús?
-ef það mega vera fleiri en ein
+b) ef það mega vera fleiri en ein
 ```{r}
 1-pbinom(0,3,0.2)
 ```
-ii) Hverjar eru líkurnar á að fleiri en ein eign séu einbýlishús?
+### ii
+Hverjar eru líkurnar á að fleiri en ein eign séu einbýlishús?
 ```{r}
 1-pbinom(1,3,0.2)
 ```
-##o##
+## o
 Gerum nú ráð fyrir að stærð einbýlishúsa í hverfinu fylgi normaldreifingu með meðaltal 170 fm og staðalfrávik 20 fm. 
-i) Sé eign úr hverfinu valin af handahófi, hverjar eru líkurnar á að hún sé stærri en 180 fm?
+### i
+Sé eign úr hverfinu valin af handahófi, hverjar eru líkurnar á að hún sé stærri en 180 fm?
 ```{r}
 pnorm(180,170,20)
 ```
 
-ii) Jonni ætlar að byggja einbýlishús í hverfinu og vill endilega að það verði í hópi 5% stærstu einbýlishúsanna í hverfinu. Hvað þarf húsið að verða stórt?
+### ii
+Jonni ætlar að byggja einbýlishús í hverfinu og vill endilega að það verði í hópi 5% stærstu einbýlishúsanna í hverfinu. Hvað þarf húsið að verða stórt?
 ```{r}
 qnorm(0.95,170,20)
 ```
